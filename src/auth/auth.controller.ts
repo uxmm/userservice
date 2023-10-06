@@ -1,7 +1,10 @@
-import { Controller, Post, Body, Res } from "@nestjs/common";
+import { Controller, Post, Body, Res, Get, Query, UseGuards } from "@nestjs/common";
 import { Response } from "express";
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from "./auth.service";
-import { SignUpDto, LoginDto } from "./dtos";
+import { SignUpDto, LoginDto, GetOtpDto, verifyOtpDto } from "./dtos";
+import { User } from "src/provider/repository/user.interface";
+import { RequestOtpPipe } from "src/validator/requestOtp-transformer.pipe";
 
 @Controller('auth')
 export class AuthController{
@@ -24,6 +27,26 @@ export class AuthController{
         try {
             const token = await this.authService.login(loginDto);
             return res.status(200).json(token)
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    @Get('/otp/request')
+    async requestOtp(@Query('accessToken', RequestOtpPipe) user:User, @Res() res: Response){
+        try {
+            const otp = await this.authService.requestOtp(user?.email);
+            return res.status(200).json(otp)
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    @Post('/otp/verify')
+    async verifyOtp(@Body() verifyOtpDto: verifyOtpDto, @Res() res: Response){
+        try {
+            const resp = await this.authService.verifyOtp(verifyOtpDto);
+            return res.status(200).json(resp)
         } catch (err) {
             throw err;
         }

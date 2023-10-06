@@ -10,6 +10,7 @@ export class DatabaseService extends PrismaClient {
                     url: process.env.DATABASE_URL,
                 },
             },
+            log: ['query', 'info', 'warn', 'error'],
         });
     }
 }
