@@ -1,14 +1,15 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+import { User } from 'src/provider/repository/user.interface';
+import { UserTransformerPipe } from 'src/validator/user-transformer.pipe';
 
 @Controller('api')
 export class UserController {
-    @UseGuards(AuthGuard('jwt'))    
-    @Get('/users')
-    getUser(@Req() Req: Request) {
-        console.log(Req.user);
-
-        return {message: Req.user}
+    @UseGuards(AuthGuard('jwt'))
+    @Get('/users/:userId')
+    getUser(@Param('userId', UserTransformerPipe) user:User, @Res() res: Response) {
+        const {id, email, username, address } = user
+        return res.json({id, username, email, address });
     }
 }

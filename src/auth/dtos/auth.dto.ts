@@ -1,4 +1,4 @@
-import { IsEmail, IsEmpty, IsNotEmpty, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator'
 
 export class SignUpDto {
     @IsNotEmpty()
@@ -25,4 +25,18 @@ export class LoginDto {
 
     @IsNotEmpty()
     password: string
+}
+
+
+export class GetOtpDto {
+    @IsEmail()
+    email: string
+}
+
+export class verifyOtpDto {
+    @IsNotEmpty()
+    otp_code: number
+
+    @IsNotEmpty()
+    email: string
 }
