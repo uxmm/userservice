@@ -46,6 +46,16 @@ export class UserRepository {
 
         return user;
     }
+
+    async deleteUser(userId: string): Promise<User> {
+        const user = await this.db.user.delete({
+            where: {
+                id: userId,
+            }
+        })
+
+        return user;
+    }
 }
 
 
