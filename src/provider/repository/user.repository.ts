@@ -22,6 +22,30 @@ export class UserRepository {
         })
         return user;
     }
+
+    async getUser(userId: string): Promise<User>{
+        const user = await this.db.user.findFirst({
+            where: {
+                id: userId
+            }
+        })
+
+        return user;
+    }
+
+
+    async setUserVerified(userId: string): Promise<User> {
+        const user = await this.db.user.update({
+            where: {
+                id: userId,
+            },
+            data: {
+                is_verified: true,
+            }
+        })
+
+        return user;
+    }
 }
 
 
